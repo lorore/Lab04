@@ -11,7 +11,7 @@ public class TestDB {
 		CorsoDAO cdao = new CorsoDAO();
 		cdao.getTuttiICorsi();
 		
-		
+		System.out.println(cdao.getCorsoByNome("Strategia, tecnologia e marketing"));
 	}
 
 }

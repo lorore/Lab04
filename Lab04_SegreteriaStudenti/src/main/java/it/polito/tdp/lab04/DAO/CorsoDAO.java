@@ -67,6 +67,40 @@ public class CorsoDAO {
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
+	
+	public Corso getCorsoByNome(String nomeCorso) {
+		final String sql="SELECT * FROM corso WHERE nome=?";
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, nomeCorso);
+			ResultSet rs = st.executeQuery();
+			if(rs.next()) {
+			String codins = rs.getString("codins");
+			int numeroCrediti = rs.getInt("crediti");
+			String nome = rs.getString("nome");
+			int periodoDidattico = rs.getInt("pd");
+				
+				Corso c=new Corso(codins, numeroCrediti, nome, periodoDidattico);
+				
+			
+			st.close();
+			conn.close();
+			
+			return c;
+			}else {
+				st.close();
+				conn.close();
+				return null;
+				
+			}
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore Db", e);
+		}
+	}
+	
 	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
 		List<Studente> result=new ArrayList<Studente>();
 		String sql="SELECT s.matricola, s.cognome, s.nome, s.CDS FROM iscrizione i , studente s WHERE i.matricola=s.matricola and codins=?";
@@ -109,7 +143,7 @@ public class CorsoDAO {
 			int rs=st.executeUpdate();
 			st.close();
 			conn.close();
-			System.out.println(rs);
+			
 			if(rs>0)
 				return true;
 			else

@@ -9,7 +9,7 @@ public class TestModel {
 		/*
 		 * 	Write here your test model
 		 */
-
+System.out.println(model.getCorsoByNome("Strategia, tecnologia e marketing").getNumeroCrediti());
 	}
 
 }

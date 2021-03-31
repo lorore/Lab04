@@ -7,6 +7,7 @@ package it.polito.tdp.lab04;
 
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -84,25 +85,18 @@ public class FXMLController {
 	    		return;
 	    	}
 	    	
-	    /*	if(!this.model.matricolaEsiste(mat)) {
-	    		txtResult.setText("La matricola " +mat+" non corrisponde a nessuno studente");
+	 
+	    	Corso c=this.model.getCorsoByNome(nomeCorso);
+	    	if(c==null) {
+	    		txtResult.setText("Non esiste nessun corso chiamato "+nomeCorso);
 	    		return;
-	    	}else {
-	    		boolean isIscritto=this.model.isStudenteIscrittoAlCorso(mat, nomeCorso);
-	    		if(isIscritto) {
-	    			txtResult.setText("Studente già iscritto a questo corso");
-	    			return;
-	    		}else {
-	    			txtResult.setText("Studente non ancora iscritto a questo corso");
-	    			return;
-	    		}
-	    	}*/
+	    	}
 	    	Studente s=this.model.getStudente(mat);
 	    	if(s==null) {
 	    		txtResult.setText("La matricola " +mat+" non corrisponde a nessuno studente");
 	    		return;
 	    	}else {
-	    	boolean iscrittoCorrettamente=this.model.inscriviStudenteACorso(s, nomeCorso);
+	    	boolean iscrittoCorrettamente=this.model.inscriviStudenteACorso(s, c);
 	    	if(iscrittoCorrettamente) {
 	    		txtResult.setText("Studente iscritto correttamente");
 	    		return;
@@ -132,12 +126,14 @@ public class FXMLController {
 	    		return;
 	    	}
 	    	
-	    	if(!this.model.matricolaEsiste(mat)) {
+	    	
+	    	Studente s=this.model.getStudente(mat);
+	    	if(s==null) {
 	    		txtResult.setText("La matricola " +mat+" non corrisponde a nessuno studente");
 	    		return;
 	    	}
 	    	else {
-	    	List<Corso> listaCorsi=this.model.getCorsiStudente(mat);
+	    	List<Corso> listaCorsi=this.model.getCorsiStudente(s);
 	    	
 	    	
 	    	
@@ -168,8 +164,14 @@ public class FXMLController {
 	    		txtResult.setText("Errore: non è stato selezionato alcun corso");
 	    		return;
 	    	}
+	    	Corso c=this.model.getCorsoByNome(nomeCorso);
+	    	if(c==null) {
+	    		txtResult.setText("Non esiste nessun corso chiamato "+nomeCorso);
+	    		return;
+	    	}else {
+	    		
 	    	
-	    	List<Studente> studentiCorso=this.model.getStudentiIscrittiAlCorso(nomeCorso);
+	    	List<Studente> studentiCorso=this.model.getStudentiIscrittiAlCorso(c);
 	    	if(studentiCorso.size()==0) {
 	    		txtResult.setText("Non risultano studenti iscritti a questo corso");
 	    		return;
@@ -183,7 +185,7 @@ public class FXMLController {
 	    		}
 	    		return;
 	    	}
-
+	    	}
 	    }
 
 	    @FXML
@@ -228,7 +230,13 @@ public class FXMLController {
 	    
 	    public void setModel(Model model) {
 			this.model=model;
-			List<String> nomiCorsi=this.model.getTuttiICorsi();
+		//	List<String> nomiCorsi=this.model.getTuttiICorsi();
+			List<Corso> corsi=this.model.getTuttiICorsi();
+			List<String> nomiCorsi=new ArrayList<String>();
+			nomiCorsi.add("");
+			for(Corso c: corsi)
+				nomiCorsi.add(c.getNome());
+			
 	    	comboBoxCorsi.getItems().addAll(nomiCorsi);
 		}
 

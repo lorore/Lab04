@@ -57,30 +57,9 @@ public class StudenteDAO {
 	
 	}
 	
-	public boolean matricolaEsiste(int matricola) {
-		final String sql="SELECT * "
-				+ "FROM studente "
-				+ "WHERE matricola=? ";
-		
 
-		try {
-			Connection conn=ConnectDB.getConnection();
-			PreparedStatement st=conn.prepareStatement(sql);
-			st.setInt(1, matricola);
-			ResultSet rs=st.executeQuery();
-			
-			
-			st.close();
-			conn.close();
-			return rs.next();
-		}catch(SQLException e) {
-			throw new RuntimeException("Error DB", e);
-		}
-		
-	}
 	
-	
-		public List<Corso> getCorsiStudente(int matricola){
+		public List<Corso> getCorsiStudente(Studente s){
 		
 		List<Corso> result=new ArrayList<Corso>();
 		final String sql="SELECT c.codins, c.crediti, c.nome, c.pd "
@@ -90,7 +69,7 @@ public class StudenteDAO {
 		try {
 			Connection conn=ConnectDB.getConnection();
 			PreparedStatement st=conn.prepareStatement(sql);
-			st.setInt(1, matricola);
+			st.setInt(1, s.getMatricola());
 			ResultSet rs=st.executeQuery();
 			
 			
